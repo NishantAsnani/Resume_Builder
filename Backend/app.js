@@ -110,7 +110,7 @@ app.post('/getData', (req, res) => {
 
     doc.fontSize(30)
     doc.font('Courier');
-    doc.text('Nishant Asnani', { align: 'center' });
+    doc.text(`${firstname} ${lastname}`, { align: 'center' });
 
 
     doc.fontSize(18)

@@ -12,8 +12,19 @@ function App() {
     objective: '',
   })
   const [URL, setURL] = useState("")
+  const [newSkill, setNewSkill] = useState('');
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value })
+  }
+  const handleSkillChange = (e) => {
+    setNewSkill(e.target.value);
+  }
+
+  const handleAddSkill = () => {
+    if (newSkill.trim() !== '') {
+      setInput({ ...input, skills: [...input.skills, newSkill] });
+      setNewSkill('');
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -27,6 +38,7 @@ function App() {
       phoneNumber: input.phoneNumber,
       emailAddress: input.emailAddress,
       objective: input.objective,
+      skills: input.skills,
     }
     try {
       const response = await axios.post('http://localhost:3000/getData', data,
@@ -104,6 +116,33 @@ function App() {
                 onChange={handleChange}
                 className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-blue-500"
               />
+            </div>
+            <div>
+              <label htmlFor="skills" className="block text-gray-700">Skills</label>
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  id="skills"
+                  name="skills"
+                  value={newSkill}
+                  onChange={handleSkillChange}
+                  className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddSkill}
+                  className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                >
+                  Add Skill
+                </button>
+              </div>
+            </div>
+            <div>
+              {input.skills && input.skills.map((skill, index) => (
+                <div key={index} className="mt-2">
+                  <span className="bg-gray-200 px-2 py-1 rounded-md mr-2">{skill}</span>
+                </div>
+              ))}
             </div>
             <div>
               <label htmlFor="phoneNumber" className="block text-gray-700">Phone Number</label>
