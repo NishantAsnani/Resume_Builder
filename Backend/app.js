@@ -152,14 +152,15 @@ app.post('/getData', (req, res) => {
     doc.moveDown()
     doc.moveDown()
 
-    doc.fontSize(17);
-    doc.font('Courier').text(`Experience`)
-    doc.font("Courier-Bold").text(`${experience.jobTitle}`);
-    doc.text(`${experience.company},${experience.location}`, { continued: true })
-    doc.text(experience.dateRange, { indent: 50 });
+    doc.fontSize(17).font('Courier').text('Experience');
+    doc.font('Courier-Bold').text(experience.jobTitle);
+    doc.text(`${experience.company}, ${experience.location}`);
+    doc.text("         " + experience.dateRange);
     experience.responsibilities.forEach((responsibility) => {
         doc.text(`- ${responsibility}`);
     });
+
+
 
     doc.text(`Education:${education.degree} in ${education.fieldOfStudy}, ${education.university}, ${education.location}`, { continued: true })
     doc.text(`     -${education.dateRange}`)
