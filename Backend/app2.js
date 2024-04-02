@@ -24,101 +24,73 @@ app.post('/getData', (req, res) => {
         emailAddress,
         objective,
         skills,
-        education
+        education,
+        Language,
+        Hobby,
+        experience,
+        achievement
     } = req.body;
 
 
+    console.log(experience)
+    console.log(achievement)
 
-
-    console.log(education)
-
-    const experience =
-        [{
-            jobTitle: "Software Engineer",
-            company: "ABC Company",
-            location: "City, State",
-            dateRange: "2014 - 2018",
-            responsibilities: [
-                "Developed web applications using JavaScript frameworks.",
-                "Collaborated with cross-functional teams to deliver projects on time."
-            ]
-        },
-        {
-            jobTitle: "Senior Software Engineer",
-            company: "DEF Company",
-            location: "City, State",
-            dateRange: "2018 - Present",
-            responsibilities: [
-                "Developed web applications using JavaScript frameworks.",
-                "Collaborated with cross-functional teams to deliver projects on time."
-            ]
-        }
-        ]
-
-    // const education =
-    //     [
-    //         {
-    //             degree: "H.S.C",
-    //             fieldOfStudy: "PCM",
-    //             institiute: "St Francis of Assisi Convent High School",
-    //             location: "Navsari, GJ",
-    //             dateRange: "2019 - 2020",
-    //             grade: "74%"
-    //         },
-    //         {
-    //             degree: "B.E",
-    //             fieldOfStudy: "Computer Science",
-    //             institiute: "Sarvajanik College of Engineering and Technology",
-    //             location: "Surat, GJ",
-    //             dateRange: "2020 - 2024",
-    //             grade: "8.98"
-    //         }
+    // const experience =
+    //     [{
+    //         jobTitle: "Software Engineer",
+    //         company: "ABC Company",
+    //         location: "City, State",
+    //         dateRange: "2014 - 2018",
+    //         responsibilities: [
+    //             "Developed web applications using JavaScript frameworks.",
+    //             "Collaborated with cross-functional teams to deliver projects on time."
+    //         ]
+    //     },
+    //     {
+    //         jobTitle: "Senior Software Engineer",
+    //         company: "DEF Company",
+    //         location: "City, State",
+    //         dateRange: "2018 - Present",
+    //         responsibilities: [
+    //             "Developed web applications using JavaScript frameworks.",
+    //             "Collaborated with cross-functional teams to deliver projects on time."
+    //         ]
+    //     }
     //     ]
 
+    // const achievements =
+    //     [{
+    //         Title: "Incoming Global Talent Intern",
+    //         institute: "AIESEC India",
+    //         location: "Surat, Gujarat ",
+    //         dateRange: " Jan 2022 - Jul 2022",
+    //         responsibilities: [
+    //             "Helped the incoming global Talent from various countries have internship opportunities in India(Surat)"
+    //         ]
+    //     },
+    //     {
+    //         Title: "NGO Intern",
+    //         institute: "Innovate4India",
+    //         location: "Surat, Gujarat ",
+    //         dateRange: "Sept 2022 - Oct 2022",
+    //         responsibilities: [
+    //             "As a part of the Clean India movement helped spread awareness regarding the separation of dry and wet waste and conducted door-to-door surveys regarding the same.",
+    //         ]
+    //     }
+    //     ]
 
-    const achievements =
-        [{
-            Title: "Incoming Global Talent Intern",
-            institute: "AIESEC India",
-            location: "Surat, Gujarat ",
-            dateRange: " Jan 2022 - Jul 2022",
-            responsibilities: [
-                "Helped the incoming global Talent from various countries have internship opportunities in India(Surat)"
-            ]
-        },
-        {
-            Title: "NGO Intern",
-            institute: "Innovate4India",
-            location: "Surat, Gujarat ",
-            dateRange: "Sept 2022 - Oct 2022",
-            responsibilities: [
-                "As a part of the Clean India movement helped spread awareness regarding the separation of dry and wet waste and conducted door-to-door surveys regarding the same.",
-            ]
-        }
-        ]
-    const Languages = ["English,Gujarati,Hindi,Sindhi"]
-    const Intrests = [" Full Stack Web Dev, Watching Anime, Playing Video Games"]
     const doc = new PDFDocument();
     const fileName = 'resume.pdf'; // Define the file name
     const imageWidth = 24; // Adjust the width of the image as needed
     const pageWidth = doc.page.width - 50;
     const totalImageWidth = imageWidth * 2;
     const startX = (pageWidth - totalImageWidth) / 2;
-    const start = new Date(education.startDate);
-    const startmonth = new Intl.DateTimeFormat('en', { month: 'long' }).format(start);
-    const startyear = start.getFullYear();
-    const end = new Date(education.endDate);
-    const endmonth = new Intl.DateTimeFormat('en', { month: 'long' }).format(end);
-    const endyear = end.getFullYear();
+
 
     // Set response headers for PDF download
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-    console.log(startmonth)
-    console.log(startyear)
 
-    console.log(endmonth)
-    console.log(endyear)
     // Pipe PDF to response
     doc.pipe(res);
 
@@ -155,8 +127,12 @@ app.post('/getData', (req, res) => {
     doc.moveDown();
     doc.font("Helvetica-Bold").fontSize(14).text('Education:', { underline: true });
     education.forEach((edu) => {
+        const startDate = new Date(edu.startDate.slice(0, 10))
+        const endDate = new Date(edu.endDate.slice(0, 10))
+        const startMonth = startDate.toLocaleDateString('en-US', { month: 'long' }).slice(0, 3);
+        const endMonth = endDate.toLocaleDateString('en-US', { month: 'long' }).slice(0, 3);
         doc.font("Helvetica-Bold").fontSize(12).text(`${edu.institiute} | ${edu.state},${edu.city}`, { continued: true });
-        doc.text(`2014 - 2018`, { align: "right" });
+        doc.text(`${startMonth} ${startDate.getFullYear()} -  ${endMonth} ${endDate.getFullYear()}`, { align: "right" });
         doc.font("Helvetica").text(`${edu.degree}, Grade:${edu.grade}`)
         doc.moveDown()
     })
@@ -171,12 +147,12 @@ app.post('/getData', (req, res) => {
     doc.moveDown(0.5);
     // Languages
     doc.font("Helvetica-Bold").fontSize(12).text('Languages:', { continued: true });
-    doc.font("Helvetica").fontSize(12).text(Languages, { indent: 10, underline: false });
+    doc.font("Helvetica").fontSize(12).text(Language.join(', '), { indent: 10, underline: false });
 
     doc.moveDown(0.5);
     // Certifications
     doc.font("Helvetica-Bold").fontSize(12).text('Intrests/Hobbies:', { continued: true });
-    doc.font("Helvetica").fontSize(12).text(Intrests, { indent: 10, underline: false });
+    doc.font("Helvetica").fontSize(12).text(Hobby.join(', '), { indent: 10, underline: false });
 
 
     doc.moveDown();
@@ -186,26 +162,36 @@ app.post('/getData', (req, res) => {
     doc.font("Helvetica-Bold").fontSize(14).text('Experience:', { underline: true });
 
     experience.forEach((exp) => {
-        doc.font("Helvetica-Bold").fontSize(12).text(`${exp.jobTitle}, ${exp.company}, ${exp.location}`, { continued: true });
 
-        doc.font("Helvetica-Bold").text(exp.dateRange, { align: 'right' });
-        exp.responsibilities.forEach((responsibility) => {
-            doc.font("Helvetica").text(`- ${responsibility}`);
-        });
+        const startDate = new Date(exp.startDate.slice(0, 10))
+        const endDate = new Date(exp.endDate.slice(0, 10))
+        const startMonth = startDate.toLocaleDateString('en-US', { month: 'long' }).slice(0, 3);
+        const endMonth = endDate.toLocaleDateString('en-US', { month: 'long' }).slice(0, 3);
+
+
+        doc.font("Helvetica-Bold").fontSize(12).text(`${exp.jobTitle}, ${exp.company} | ${exp.state},${exp.city}`, { continued: true });
+
+        doc.font("Helvetica-Bold").text(`${startMonth} ${startDate.getFullYear()} -  ${endMonth} ${endDate.getFullYear()}`, { align: 'right' });
+
+        doc.font("Helvetica").text(`- ${exp.responsibilities}`);
+
         doc.moveDown()
     })
 
 
     // Leadership or Activities
-    doc.font("Helvetica-Bold").fontSize(14).text('Activities:', { underline: true });
+    doc.font("Helvetica-Bold").fontSize(14).text('Achievements:', { underline: true });
 
-    achievements.forEach((exp) => {
-        doc.font("Helvetica-Bold").fontSize(12).text(`${exp.Title}, ${exp.institute}, ${exp.location}`, { continued: true });
+    achievement.forEach((exp) => {
+        const startDate = new Date(exp.startDate.slice(0, 10))
+        const startMonth = startDate.toLocaleDateString('en-US', { month: 'long' }).slice(0, 3);
 
-        doc.font("Helvetica-Bold").text(exp.dateRange, { align: 'right' });
-        exp.responsibilities.forEach((responsibility) => {
-            doc.font("Helvetica").text(`- ${responsibility}`, { align: "justify" });
-        });
+        doc.font("Helvetica-Bold").fontSize(12).text(`${exp.Title}, ${exp.institute} | ${exp.state},${exp.city}`, { continued: true });
+
+        doc.font("Helvetica-Bold").text(`${startMonth} ${startDate.getFullYear()}`, { align: 'right' });
+
+        doc.font("Helvetica").text(`- ${exp.responsibilities}`, { align: "justify" });
+
         doc.moveDown()
     })
 
