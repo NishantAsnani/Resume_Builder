@@ -93,6 +93,33 @@ function App() {
               />
             </div>
             <div>
+              <label htmlFor="skills" className="block text-gray-700">Skills</label>
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  id="skills"
+                  name="skills"
+                  value={newSkill}
+                  onChange={handleSkillChange}
+                  className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddSkill}
+                  className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                >
+                  Add Skill
+                </button>
+              </div>
+            </div>
+            <div>
+              {input.skills && input.skills.map((skill, index) => (
+                <div key={index} className="mt-2">
+                  <span className="bg-gray-200 px-2 py-1 rounded-md mr-2">{skill}</span>
+                </div>
+              ))}
+            </div>
+            <div>
               <label htmlFor="phoneNumber" className="block text-gray-700">Phone Number</label>
               <input
                 type="text"
