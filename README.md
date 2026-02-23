@@ -85,7 +85,7 @@ Open two terminal windows/tabs.
   npm run dev      # starts Vite dev server on http://localhost:3000
   ```
 
-Then visit `http://localhost:3000` in your browser and start building a resume!
+Then visit `http://localhost:5173` in your browser and start building a resume!
 
 > 🔁 The frontend proxies API requests to the backend (check `vite.config.js`).
 
